@@ -34,6 +34,7 @@ MONTHS = [
 
 
 def get_latest_game():
+    global games
     for url, sport in URLS:
         req = requests.get(url)
         soup = BeautifulSoup(req.text, "html.parser")
@@ -76,6 +77,8 @@ def get_latest_game():
             )
 
     # get latest game
+    # make sure result_bool isn't None
+    games = [x for x in games if x[3] != None]
     games.sort(key=lambda x: x[0])  # sort by date
     latest = games[-1]
 
