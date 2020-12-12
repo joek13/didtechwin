@@ -1,20 +1,19 @@
 import render
+import scrape
 import sys
 
 OUTPUT_PATH = "./docs/index.html"
 
-if len(sys.argv) != 2:
-    print(f"{sys.argv[0]}: incorrect number of arguments")
-    print(f"usage: {sys.argv[0]} <win: True/False>")
-    sys.exit(1)
-
-if sys.argv[1].lower() not in ["true", "false"]:
-    print(f"{sys.argv[0]}: invalid argument {sys.argv[1]}")
-    print(f"usage: {sys.argv[0]} <win: True/False>")
-    sys.exit(1)
-
-win = True if sys.argv[1].lower() == "true" else False
+latest_game = scrape.get_latest_game()
 
 with open("./docs/index.html", "w") as out:
-    rendered = render.render_page(win)
+    date, sport, opponent, win, score = latest_game
+    search_string = f"virginia tech {sport} {opponent}"
+    # google search url for this game
+    query = f"https://google.com/search?q={search_string}"
+    rendered = render.render_page(
+        win=win,
+        score=score,
+        query=query
+    )
     out.write(rendered)
